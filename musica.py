@@ -1,9 +1,23 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 app.secret_key = 'aprendendodoiniciocomdaniel'
 
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
+        SGBD='mysql+mysqlconnector',
+        usuario='root',
+        senha='admin',
+        servidor='localhost',
+        database='playmusica'
+)
 
+db = SQLAlchemy(app)
+
+
+'''
 class Musica:
     def __init__(self, nome, cantorBandaGrupo, genero):
         self.nome = nome
@@ -15,8 +29,20 @@ musica01 = Musica('Temporal', 'Hungria', 'Rap')
 musica02 = Musica('Papai banca', 'Mc Ryan SP', 'Funk')
 musica03 = Musica('Camisa 10', 'Turma do Pagode', 'Pagode')
 lista = [musica01, musica02, musica03]
+'''
 
 
+class Musica(db.Model):
+    id_musica = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nome_musica = db.Column(db.String(50), nullable=False)
+    cantor_banda = db.Column(db.String(50), nullable=False)
+    genero_musica = db.Column(db.String(20), nullable=False)
+
+    def __rep__(self):
+        return '<Name %r>' % self.name
+
+
+'''
 class Usuario:
     def __init__(self, nome, login, senha):
         self.nome = nome
@@ -33,6 +59,17 @@ usuarios = {
     usuario02.login: usuario02,
     usuario03.login: usuario03,
 }
+'''
+
+
+class Usuario(db.Model):
+    id_usuario = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nome_usuario = db.Column(db.String(50), nullable=False)
+    login_usuario = db.Column(db.String(20), nullable=False)
+    senha_usuario = db.Column(db.String(15), nullable=False)
+
+    def __rep__(self):
+        return '<Name %r>' % self.name
 
 
 @app.route('/')
