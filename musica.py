@@ -17,21 +17,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 db = SQLAlchemy(app)
 
 
-'''
-class Musica:
-    def __init__(self, nome, cantorBandaGrupo, genero):
-        self.nome = nome
-        self.cantorBanda = cantorBandaGrupo
-        self.genero = genero
-
-
-musica01 = Musica('Temporal', 'Hungria', 'Rap')
-musica02 = Musica('Papai banca', 'Mc Ryan SP', 'Funk')
-musica03 = Musica('Camisa 10', 'Turma do Pagode', 'Pagode')
-lista = [musica01, musica02, musica03]
-'''
-
-
 class Musica(db.Model):
     id_musica = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome_musica = db.Column(db.String(50), nullable=False)
@@ -40,26 +25,6 @@ class Musica(db.Model):
 
     def __rep__(self):
         return '<Name %r>' % self.name
-
-
-'''
-class Usuario:
-    def __init__(self, nome, login, senha):
-        self.nome = nome
-        self.login = login
-        self.senha = senha
-
-
-usuario01 = Usuario("Daniel Xavier", "daniel.udemy", "admin")
-usuario02 = Usuario("Fabrício", "fafreir", "udemy")
-usuario03 = Usuario("Danielle", "dani", "dani")
-
-usuarios = {
-    usuario01.login: usuario01,
-    usuario02.login: usuario02,
-    usuario03.login: usuario03,
-}
-'''
 
 
 class Usuario(db.Model):
@@ -76,6 +41,7 @@ class Usuario(db.Model):
 def listarMusicas():
     if session['usuario_logado'] == None or 'usuario_logado' not in session:
         return redirect(url_for('login'))
+    lista = Musica.query.order_by(Musica.id_musica)
     return render_template('lista_musicas.html', titulo='Musicas cadastradas', musicas=lista)
 
 
@@ -92,9 +58,16 @@ def adicionar_musica():
     cantorBanda = request.form['txtCantor']
     genero = request.form['txtGenero']
 
-    novaMusica = Musica(nome, cantorBanda, genero)
-    lista.append(novaMusica)
-    # return redirect('/')
+    musica = Musica.query.filter_by(nome_musica=nome).first()
+
+    if musica:
+        flash("Musica já está cadastrada!")
+        return redirect(url_for('listarMusicas'))
+
+    nova_musica = Musica(
+        nome_musica=nome, cantor_banda=cantorBanda, genero_musica=genero)
+    db.session.add(nova_musica)
+    db.session.commit()
     return redirect(url_for('listarMusicas'))
 
 
@@ -106,13 +79,13 @@ def login():
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
 
-    if request.form['txtLogin'] in usuarios:
-        usuarioEncontrado = usuarios[request.form['txtLogin']]
-        if request.form['txtSenha'] == usuarioEncontrado.senha:
+    usuario = Usuario.query.filter_by(
+        login_usuario=request.form['txtLogin']).first()
+    if usuario:
+        if request.form['txtSenha'] == usuario.senha_usuario:
             session['usuario_logado'] = request.form['txtLogin']
             flash(
-                f"Seja bem-vindo {usuarioEncontrado.nome} logado com sucesso!")
-            # return redirect('/')
+                f"Seja bem-vindo {usuario.login_usuario} logado com sucesso!")
             return redirect(url_for('listarMusicas'))
         else:
             flash("Senha inválida!")
