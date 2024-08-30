@@ -47,3 +47,5 @@ insert into usuario(nome_usuario, login_usuario, senha_usuario)
 values('Daniel Xavier', 'daniel.xds93', 'admin'),
 ('Vilma Nunes', 'vilmanunes104', 'nunes'),
 ('Daniel Xavier Santos', 'daniel.xds94', 'admin');
+insert into usuario(nome_usuario, login_usuario, senha_usuario) 
+values('Danielle', 'dani', 'dani');
