@@ -3,16 +3,8 @@ from flask import Flask, render_template, request, redirect, session, flash, url
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = 'aprendendodoiniciocomdaniel'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
-        SGBD='mysql+mysqlconnector',
-        usuario='root',
-        senha='admin',
-        servidor='localhost',
-        database='playmusica'
-)
+app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
 
