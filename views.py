@@ -34,6 +34,10 @@ def adicionar_musica():
         nome_musica=nome, cantor_banda=cantorBanda, genero_musica=genero)
     db.session.add(nova_musica)
     db.session.commit()
+
+    arquivo = request.files['arquivo']
+    pasta_arquivo = app.config['UPLOAD_PASTA']
+    arquivo.save(f'{pasta_arquivo}/album{nova_musica.id_musica}.jpg')
     return redirect(url_for('listarMusicas'))
 
 
