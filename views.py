@@ -84,7 +84,17 @@ def autenticar():
         return redirect(url_for('login'))
 
 
-@app.route('/sair')
+@app.route('/excluir/<int:id>')
+def excluir(id):
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect(url_for('login'))
+    Musica.query.filter_by(id_musica=id).delete()
+    db.session.commit()
+    flash('Musica excluida com sucesso')
+    return redirect(url_for('listarMusicas'))
+
+
+@ app.route('/sair')
 def sair():
     session['usuario_logado'] = None
 
