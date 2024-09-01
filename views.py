@@ -37,6 +37,28 @@ def adicionar_musica():
     return redirect(url_for('listarMusicas'))
 
 
+@app.route('/editar/<int:id>')
+def editar(id):
+    if session['usuario_logado'] == None or 'usuario_logado' not in session:
+        return redirect(url_for('login'))
+
+    musicaBuscada = Musica.query.filter_by(id_musica=id).first()
+    return render_template('editar_musica.html', titulo="Editar música", musica=musicaBuscada)
+
+
+@app.route('/atualizar', methods=['POST',])
+def atualizar():
+    musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
+
+    musica.nome_musica = request.form['txtNome']
+    musica.cantor_banda = request.form['txtCantor']
+    musica.genero_musica = request.form['txtGenero']
+
+    db.session.add(musica)
+    db.session.commit()
+    return redirect(url_for('listarMusicas'))
+
+
 @app.route('/login')
 def login():
     return render_template('login.html')
