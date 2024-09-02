@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, session, flash, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
 from models import Musica, Usuario
 from musica import app, db
-
+from definicoes import recupera_imagem
 
 @app.route('/')
 def listarMusicas():
@@ -47,7 +47,10 @@ def editar(id):
         return redirect(url_for('login'))
 
     musicaBuscada = Musica.query.filter_by(id_musica=id).first()
-    return render_template('editar_musica.html', titulo="Editar música", musica=musicaBuscada)
+    
+    album = recupera_imagem(id)
+
+    return render_template('editar_musica.html', titulo="Editar música", musica=musicaBuscada, album_musica = album)
 
 
 @app.route('/atualizar', methods=['POST',])
@@ -103,3 +106,7 @@ def sair():
     session['usuario_logado'] = None
 
     return redirect(url_for('login'))
+
+@app.route('/uploads/<nome_imagem>')
+def imagem(nome_imagem):
+    return send_from_directory('uploads', nome_imagem)
