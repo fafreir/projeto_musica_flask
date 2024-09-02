@@ -3,6 +3,6 @@ from musica import app
 
 def recupera_imagem(id):
     for nome_imagem in os.listdir(app.config['UPLOAD_PASTA']):
-        if nome_imagem == f'album{id}':
+        if nome_imagem == f'album{id}.jpg':
             return nome_imagem
         return 'default.png'
