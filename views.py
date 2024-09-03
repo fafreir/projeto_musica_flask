@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
 from models import Musica, Usuario
 from musica import app, db
-from definicoes import recupera_imagem
+from definicoes import deletar_imagem, recupera_imagem
 from time import time
 
 
@@ -81,9 +81,12 @@ def atualizar():
     nome_arquivo = nome_arquivo.split('.')
 
     momento = time()
-    
+
     extensao = nome_arquivo[len(nome_arquivo)-1]
     nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
+    
+    deletar_imagem(musica.id_musica)
+
     arquivo.save(f'{pasta_upload}/{nome_completo}')
     return redirect(url_for('listarMusicas'))
 
@@ -118,6 +121,9 @@ def excluir(id):
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login'))
     Musica.query.filter_by(id_musica=id).delete()
+    
+    deletar_imagem(id)
+
     db.session.commit()
     flash('Musica excluida com sucesso')
     return redirect(url_for('listarMusicas'))
