@@ -8,6 +8,6 @@ def recupera_imagem(id):
         nome = str(nome_imagem)
         nome = nome.split('.')
 
-        if nome[0] == f'album{id}.jpg':
+        if f'album{id}_.jpg' in nome[0]:
             return nome_imagem
         return 'default.png'
