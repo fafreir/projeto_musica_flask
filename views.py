@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, send_from_directory
 from models import Musica, Usuario
 from musica import app, db
 from definicoes import recupera_imagem
+from time import time
 
 
 @app.route('/')
@@ -41,8 +42,10 @@ def adicionar_musica():
 
     nome_arquivo = arquivo.filename
 
+    momento = time()
+
     extensao = nome_arquivo[len(nome_arquivo)-1]
-    nome_completo = f'album{nova_musica.id_musica}.{extensao}'
+    nome_completo = f'album{nova_musica.id_musica}+{momento}.{extensao}'
 
     arquivo.save(f'{pasta_arquivo}/{nome_completo}')
     return redirect(url_for('listarMusicas'))
@@ -77,8 +80,10 @@ def atualizar():
     nome_arquivo = arquivo.filename
     nome_arquivo = nome_arquivo.split('.')
 
+    momento = time()
+    
     extensao = nome_arquivo[len(nome_arquivo)-1]
-    nome_completo = f'album{musica.id_musica}.{extensao}'
+    nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
     arquivo.save(f'{pasta_upload}/{nome_completo}')
     return redirect(url_for('listarMusicas'))
 
