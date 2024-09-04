@@ -24,9 +24,15 @@ def cadastrar_musica():
 
 @app.route('/adicionar', methods=['POST',])
 def adicionar_musica():
-    nome = request.form['txtNome']
-    cantorBanda = request.form['txtCantor']
-    genero = request.form['txtGenero']
+
+    formRecebido = FormularioMusica(request.form)
+
+    if not formRecebido.validate_on_submit():
+        return redirect(url_for('cadastrar_musica'))
+
+    nome = formRecebido.nome.data
+    cantorBanda = formRecebido.grupo.data
+    genero = formRecebido.genero.data
 
     musica = Musica.query.filter_by(nome_musica=nome).first()
 
@@ -40,16 +46,18 @@ def adicionar_musica():
     db.session.commit()
 
     arquivo = request.files['arquivo']
-    pasta_arquivo = app.config['UPLOAD_PASTA']
 
-    nome_arquivo = arquivo.filename
+    if arquivo:
+        pasta_arquivo = app.config['UPLOAD_PASTA']
 
-    momento = time()
+        nome_arquivo = arquivo.filename
 
-    extensao = nome_arquivo[len(nome_arquivo)-1]
-    nome_completo = f'album{nova_musica.id_musica}+{momento}.{extensao}'
+        momento = time()
 
-    arquivo.save(f'{pasta_arquivo}/{nome_completo}')
+        extensao = nome_arquivo[len(nome_arquivo)-1]
+        nome_completo = f'album{nova_musica.id_musica}+{momento}.{extensao}'
+
+        arquivo.save(f'{pasta_arquivo}/{nome_completo}')
     return redirect(url_for('listarMusicas'))
 
 
@@ -60,9 +68,15 @@ def editar(id):
 
     musicaBuscada = Musica.query.filter_by(id_musica=id).first()
 
+    form = FormularioMusica()
+
+    form.nome.data = musicaBuscada.nome_musica
+    form.grupo.data = musicaBuscada.cantor_banda
+    form.genero.data = musicaBuscada.genero_musica
+
     album = recupera_imagem(id)
 
-    return render_template('editar_musica.html', titulo="Editar música", musica=musicaBuscada, album_musica=album)
+    return render_template('editar_musica.html', titulo="Editar música", musica=form, album_musica=album, id = id)
 
 
 @app.route('/atualizar', methods=['POST',])
