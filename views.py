@@ -81,29 +81,33 @@ def editar(id):
 
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
-    musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
 
-    musica.nome_musica = request.form['txtNome']
-    musica.cantor_banda = request.form['txtCantor']
-    musica.genero_musica = request.form['txtGenero']
+    formRecebido = FormularioMusica(request.form)
+    
+    if formRecebido.validate_on_submit():
+        musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
 
-    db.session.add(musica)
-    db.session.commit()
+        musica.nome_musica = formRecebido.nome.data
+        musica.cantor_banda = formRecebido.grupo.data
+        musica.genero_musica = formRecebido.genero.data
 
-    arquivo = request.files['arquivo']
-    pasta_upload = app.config['UPLOAD_PASTA']
+        db.session.add(musica)
+        db.session.commit()
 
-    nome_arquivo = arquivo.filename
-    nome_arquivo = nome_arquivo.split('.')
+        arquivo = request.files['arquivo']
+        pasta_upload = app.config['UPLOAD_PASTA']
 
-    momento = time()
+        nome_arquivo = arquivo.filename
+        nome_arquivo = nome_arquivo.split('.')
 
-    extensao = nome_arquivo[len(nome_arquivo)-1]
-    nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
+        momento = time()
 
-    deletar_imagem(musica.id_musica)
+        extensao = nome_arquivo[len(nome_arquivo)-1]
+        nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
 
-    arquivo.save(f'{pasta_upload}/{nome_completo}')
+        deletar_imagem(musica.id_musica)
+
+        arquivo.save(f'{pasta_upload}/{nome_completo}')
     return redirect(url_for('listarMusicas'))
 
 
