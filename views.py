@@ -84,30 +84,32 @@ def atualizar():
 
     formRecebido = FormularioMusica(request.form)
     
-    if formRecebido.validate_on_submit():
-        musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
+        if formRecebido.validate_on_submit():
+            musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
 
-        musica.nome_musica = formRecebido.nome.data
-        musica.cantor_banda = formRecebido.grupo.data
-        musica.genero_musica = formRecebido.genero.data
+            musica.nome_musica = formRecebido.nome.data
+            musica.cantor_banda = formRecebido.grupo.data
+            musica.genero_musica = formRecebido.genero.data
 
-        db.session.add(musica)
-        db.session.commit()
+            db.session.add(musica)
+            db.session.commit()
 
-        arquivo = request.files['arquivo']
-        pasta_upload = app.config['UPLOAD_PASTA']
+            arquivo = request.files['arquivo']
+            pasta_upload = app.config['UPLOAD_PASTA']
 
-        nome_arquivo = arquivo.filename
-        nome_arquivo = nome_arquivo.split('.')
+            nome_arquivo = arquivo.filename
+            nome_arquivo = nome_arquivo.split('.')
 
-        momento = time()
+            momento = time()
 
-        extensao = nome_arquivo[len(nome_arquivo)-1]
-        nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
+            extensao = nome_arquivo[len(nome_arquivo)-1]
+            nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
 
-        deletar_imagem(musica.id_musica)
+            deletar_imagem(musica.id_musica)
 
-        arquivo.save(f'{pasta_upload}/{nome_completo}')
+            arquivo.save(f'{pasta_upload}/{nome_completo}')
+        
+        flash("Musica editada com sucesso!")
     return redirect(url_for('listarMusicas'))
 
 
