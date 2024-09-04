@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
 from models import Musica, Usuario
 from musica import app, db
-from definicoes import deletar_imagem, recupera_imagem
+from definicoes import FormularioMusica, deletar_imagem, recupera_imagem
 from time import time
 
 
@@ -17,7 +17,9 @@ def listarMusicas():
 def cadastrar_musica():
     if session['usuario_logado'] == None or 'usuario_logado' not in session:
         return redirect(url_for('login'))
-    return render_template('cadastra_musica.html', titulo="Cadastrar música")
+
+    form = FormularioMusica()
+    return render_template('cadastra_musica.html', titulo="Cadastrar música", form=form)
 
 
 @app.route('/adicionar', methods=['POST',])
@@ -84,7 +86,7 @@ def atualizar():
 
     extensao = nome_arquivo[len(nome_arquivo)-1]
     nome_completo = f'album{musica.id_musica}_{momento}.{extensao}'
-    
+
     deletar_imagem(musica.id_musica)
 
     arquivo.save(f'{pasta_upload}/{nome_completo}')
@@ -121,7 +123,7 @@ def excluir(id):
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login'))
     Musica.query.filter_by(id_musica=id).delete()
-    
+
     deletar_imagem(id)
 
     db.session.commit()
