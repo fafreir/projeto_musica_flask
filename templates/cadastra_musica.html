@@ -5,27 +5,22 @@
         <fieldset> 
 
             <div class='mb-3'>
-                <label for='arquivo' class='form-label'>Selecione a imagem capa do album</label>
-                <input type="file" name="arquivo" accept=".jpg, .jpeg, .png" id='arquivo' class='form-control'>
+                {{ form.nome.label(class="form-label")}}
+                {{ form.nome(class="form-control")}}
             </div>
 
             <div class='mb-3'>
-                <label for='txtNome'>Nome da Musica:</label>
-                <input type="text" name="txtNome" id='txtNome' class='form-control'>
+                {{ form.grupo.label(class="form-label")}}
+                {{ form.grupo(class="form-control")}}
             </div>
 
             <div class='mb-3'>
-                <label for='txtCantor'>Cantor / Grupo / Banda:</label>
-                <input type="text" name="txtCantor" id='txtCantor' class='form-control'>
+                {{ form.genero.label(class="form-label")}}
+                {{ form.genero(class="form-control")}}
             </div>
 
             <div class='mb-3'>
-                <label for='txtGenero'>Genero:</label>
-                <input type="text" name="txtGenero" id='txtGenero' class='form-control'>
-            </div>
-
-            <div class='mb-3'>
-                <button type="submit" class='btn btn-primary'>Cadastrar música</button>
+                {{ form.cadastrar(class="btn btn-primary")}}
             </div>
 
         </fieldset>
