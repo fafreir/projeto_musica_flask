@@ -6,11 +6,11 @@ from wtforms import StringField, validators, SubmitField
 
 class FormularioMusica(FlaskForm):
     nome = StringField('Nome da música', [
-                       validators.DataRequired(), validators.length(min=2, max=50)])
+                       validators.DataRequired("Digite o nome da musica"), validators.length(min=2, max=50)])
     grupo = StringField('Cantor / Banda / Grupo',
-                        [validators.DataRequired(), validators.length(min=2, max=50)])
-    genero = StringField('Genero', validators.DataRequired(),
-                         validators.length(min=2, max=20))
+                        [validators.DataRequired("Nome do Cantor/Banda/Grupo"), validators.length(min=2, max=50)])
+    genero = StringField('Genero', [validators.DataRequired("Digite o genero"),
+                         validators.length(min=2, max=20)])
     cadastrar = SubmitField('Cadastrar Música')
 
 
