@@ -1,2 +1,4 @@
 .mypy_cache
 udemy
+venv
+__pycache__
