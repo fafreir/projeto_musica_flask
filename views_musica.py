@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
-from models import Musica, Usuario
+from flask import render_template, request, redirect, send_from_directory, session, flash, url_for
+from models import Musica
 from musica import app, db
-from definicoes import FormularioMusica, deletar_imagem, recupera_imagem, FormularioUsuario
+from definicoes import FormularioMusica, deletar_imagem, recupera_imagem
 from time import time
 
 
@@ -76,18 +76,18 @@ def editar(id):
 
     album = recupera_imagem(id)
 
-    return render_template('editar_musica.html', titulo="Editar música", musica=form, album_musica=album, id=id)
+    return render_template('editar_musica.html', titulo="Editar música", musica=form, album_musica=album, id = id)
 
 
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
 
     formRecebido = FormularioMusica(request.form)
-
+    
     if formRecebido.validate_on_submit():
-        musica = Musica.query.filter_by(
-            id_musica=request.form['txtId']).first()
+        musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
 
+        
         musica.nome_musica = formRecebido.nome.data
         musica.cantor_banda = formRecebido.grupo.data
         musica.genero_musica = formRecebido.genero.data
@@ -111,7 +111,7 @@ def atualizar():
             deletar_imagem(musica.id_musica)
 
             arquivo.save(f'{pasta_upload}/{nome_completo}')
-
+        
         flash("Musica editada com sucesso!")
     return redirect(url_for('listarMusicas'))
 
