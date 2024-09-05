@@ -26,18 +26,19 @@
         <form method='post' action='/autenticar'>
             <fieldset>
 
+                {{ form.csrf_token() }}
                 <div class='mb-3'>
-                    <label for='txtLogin'>Login</label>
-                    <input type='text' name='txtLogin' id='txtLogin' class='form-control'>
+                    {{ form.usuario.label(class="form-label")}}
+                    {{ form.usuario(class="form-control")}}
                 </div>
 
                 <div class='mb-3'>
-                    <label for='txtSenha'>Senha</label>
-                    <input type='password' id='txtSenha' name='txtSenha' class='form-control'>
+                    {{ form.senha.label(class="form-label")}}
+                    {{ form.senha(class="form-control")}}
                 </div>
 
                 <div class='mb-3'>
-                    <button type='submit' class='btn btn-primary'>Logar</button>
+                    {{ form.logar(class="btn btn-primary")}}
                 </div>
 
             </fieldset>
