@@ -1,17 +1,20 @@
-from flask import Flask, render_template, request, redirect, session, flash, url_for
-from musica import app
-from definicoes import deletar_imagem, FormularioUsuario
 
+
+from flask import flash, redirect, render_template, request, session, url_for
+from definicoes import FormularioUsuario
+from musica import app
 
 @app.route('/login')
 def login():
     form = FormularioUsuario()
+
     return render_template('login.html', form=form)
 
 
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
     from models import Usuario
+    
     form = FormularioUsuario(request.form)
 
     usuario = Usuario.query.filter_by(
@@ -29,7 +32,6 @@ def autenticar():
         flash("Usuário ou senha inválida!")
         # return redirect('/login')
         return redirect(url_for('login'))
-
 
 @ app.route('/sair')
 def sair():
