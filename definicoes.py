@@ -1,7 +1,7 @@
 import os
 from musica import app
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField
+from wtforms import StringField, validators, SubmitField, PasswordField
 
 
 class FormularioMusica(FlaskForm):
@@ -12,6 +12,14 @@ class FormularioMusica(FlaskForm):
     genero = StringField('Genero', [validators.DataRequired("Digite o genero"),
                          validators.length(min=2, max=20)])
     cadastrar = SubmitField('Cadastrar Música')
+
+
+class FormularioUsuario(FlaskForm):
+    usuario = StringField(
+        'Usuário', [validators.DataRequired(), validators.length(min=2, max=20)])
+    senha = PasswordField(
+        'Senha', [validators.DataRequired(), validators.length(min=6, max=15)])
+    logar = SubmitField('Entrar')
 
 
 def recupera_imagem(id):
