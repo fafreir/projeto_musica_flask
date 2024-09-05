@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
 from models import Musica, Usuario
 from musica import app, db
-from definicoes import FormularioMusica, deletar_imagem, recupera_imagem
+from definicoes import FormularioMusica, deletar_imagem, recupera_imagem, FormularioUsuario
 from time import time
 
 
@@ -118,7 +118,8 @@ def atualizar():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    form = FormularioUsuario()
+    return render_template('login.html', form=form)
 
 
 @app.route('/autenticar', methods=['POST',])
