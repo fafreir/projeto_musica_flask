@@ -13,14 +13,12 @@ class FormularioMusica(FlaskForm):
                          validators.length(min=2, max=20)])
     cadastrar = SubmitField('Cadastrar Música')
 
-
 class FormularioUsuario(FlaskForm):
-    usuario = StringField(
-        'Usuário', [validators.DataRequired(), validators.length(min=2, max=20)])
-    senha = PasswordField(
-        'Senha', [validators.DataRequired(), validators.length(min=4, max=15)])
-    logar = SubmitField('Entrar')
+    usuario = StringField('Usuario', [validators.DataRequired(), validators.length(min=4, max=20)])
 
+    senha = PasswordField('Senha', [validators.DataRequired(), validators.length(min=4, max=15)])
+
+    logar = SubmitField('Entrar')
 
 def recupera_imagem(id):
     for nome_imagem in os.listdir(app.config['UPLOAD_PASTA']):
