@@ -76,25 +76,28 @@ def editar(id):
 
     album = recupera_imagem(id)
 
-    return render_template('editar_musica.html', titulo="Editar música", musica=form, album_musica=album, id = id)
+    return render_template('editar_musica.html', titulo="Editar música", musica=form, album_musica=album, id=id)
 
 
 @app.route('/atualizar', methods=['POST',])
 def atualizar():
 
     formRecebido = FormularioMusica(request.form)
-    
-        if formRecebido.validate_on_submit():
-            musica = Musica.query.filter_by(id_musica=request.form['txtId']).first()
 
-            musica.nome_musica = formRecebido.nome.data
-            musica.cantor_banda = formRecebido.grupo.data
-            musica.genero_musica = formRecebido.genero.data
+    if formRecebido.validate_on_submit():
+        musica = Musica.query.filter_by(
+            id_musica=request.form['txtId']).first()
 
-            db.session.add(musica)
-            db.session.commit()
+        musica.nome_musica = formRecebido.nome.data
+        musica.cantor_banda = formRecebido.grupo.data
+        musica.genero_musica = formRecebido.genero.data
 
-            arquivo = request.files['arquivo']
+        db.session.add(musica)
+        db.session.commit()
+
+        arquivo = request.files['arquivo']
+
+        if arquivo:
             pasta_upload = app.config['UPLOAD_PASTA']
 
             nome_arquivo = arquivo.filename
@@ -108,7 +111,7 @@ def atualizar():
             deletar_imagem(musica.id_musica)
 
             arquivo.save(f'{pasta_upload}/{nome_completo}')
-        
+
         flash("Musica editada com sucesso!")
     return redirect(url_for('listarMusicas'))
 
