@@ -49,3 +49,6 @@ values('Daniel Xavier', 'daniel.xds93', 'admin'),
 ('Daniel Xavier Santos', 'daniel.xds94', 'admin');
 insert into usuario(nome_usuario, login_usuario, senha_usuario) 
 values('Danielle', 'dani', 'dani');
+
+alter table usuario
+modify senha_usuario varchar(255) not null;
