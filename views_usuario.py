@@ -1,8 +1,9 @@
 
 
 from flask import flash, redirect, render_template, request, session, url_for
-from definicoes import FormularioUsuario
+from definicoes import FormularioCadastroUsuario, FormularioUsuario
 from musica import app
+
 
 @app.route('/login')
 def login():
@@ -14,7 +15,7 @@ def login():
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
     from models import Usuario
-    
+
     form = FormularioUsuario(request.form)
 
     usuario = Usuario.query.filter_by(
@@ -33,8 +34,15 @@ def autenticar():
         # return redirect('/login')
         return redirect(url_for('login'))
 
-@ app.route('/sair')
+
+@app.route('/cadastraUsuario')
+def cadastra_usuario():
+    form = FormularioCadastroUsuario()
+    return render_template("cadastra_usuario.html", titulo="Cadastro de Usuário", form=form)
+
+
+@app.route('/sair')
 def sair():
     session['usuario_logado'] = None
 
-    return redirect(url_for('login'))
+    return redirect('login')
