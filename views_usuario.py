@@ -37,6 +37,10 @@ def autenticar():
 
 @app.route('/cadastraUsuario')
 def cadastra_usuario():
+
+    if session['usuario_logado'] == None or 'usuario_logado' not in session:
+        return redirect(url_for('login'))
+
     form = FormularioCadastroUsuario()
     return render_template("cadastra_usuario.html", titulo="Cadastro de Usuário", form=form)
 
